@@ -35,22 +35,35 @@ class MemmorialAccountController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'theme_id' => 'required|integer',
             'music_id' => 'required|integer',
             'first_name' => 'required',
             'gender' => 'required',
             'dob' => 'required|date',
             'passed_date' => 'required|date',
             'relation_id' => 'required',
-            'domain' => 'unique:memorial_accounts',
             'passed_country'=> 'required|integer',
-            'birth_country'=> 'required|integer',
-            'personal_phrase'=> 'max:350',
-            'terms'    => 'required',
+            'birth_country'=> 'required|integer'
         ]);
         if ($validator->fails()) {
+            return"aaaaa";
             return back()->withInput()->withErrors($validator);
         }else{
+            if ($request->hasFile('file')) {
+                        $name = "photo_g".time();
+                        $extension1 = $request->file->extension();
+                        $request->file('file')->move(public_path().'/gallery',$name.".".$extension1);
+                        $source = "gallery/".$name.".".$extension1;
+                        $info = getimagesize($source);
+                        if ($info['mime'] == 'image/jpeg'){
+                            $image = imagecreatefromjpeg($source);
+                        }elseif ($info['mime'] == 'image/gif'){ 
+                            $image = imagecreatefromgif($source);
+                        }elseif ($info['mime'] == 'image/png'){ 
+                            $image = imagecreatefrompng($source);
+                        }
+                        imagejpeg($image, "gallery/".$name.".".$extension1, 60);
+                    }
+            dd($request->all());die();
             if(!$request->domain){
                 $name = $request->first_name.$request->middle_name.$request->last_name;
                 $domain_check = MemorialAccount::whereDomain($name)->first();

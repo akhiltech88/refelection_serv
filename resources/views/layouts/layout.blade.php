@@ -35,7 +35,7 @@
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="about-us.html">ABOUT</a></li>
                 <li><a href="price.html">PRICE &amp; FEATURES</a></li>
-                <li><a href="create.html">CREATE MEMORIAL</a></li>
+                <li><a href="{{ url('create-memorials') }}">CREATE MEMORIAL</a></li>
                 <li><a href="memorial-wall.html">MEMORIAL WALL</a></li>
                 <li><a href="contact.html">CONTACT</a></li>
             </ul>
