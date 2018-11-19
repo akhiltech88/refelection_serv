@@ -345,6 +345,7 @@
         $(function() {
             var elems = document.getElementById('register');
             var register_model = M.Modal.init(elems, {});
+            //register_model.open();
             $('#save_btn').click(function() {
                 register_model.open();
             })
@@ -477,7 +478,9 @@ $(document).ready(function(e){
         // audio.play();
      }
      $("input").click(function(){
-        alert();
+        var elems = document.getElementById('register');
+            var register_model = M.Modal.init(elems, {});
+            register_model.open(); 
      });
 });
 </script>
