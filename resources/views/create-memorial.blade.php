@@ -77,7 +77,7 @@
                         </div>
                         <div class="col s12 m4 file-field input-field">
                             <div class="btn"><span>File</span>
-                                <input type="file" type="text" id="file" name="file">
+                                <input type="file" id="file" name="file" accept="image/*">
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate"  type="text" name="photo" placeholder="Personal Photograph">
@@ -117,9 +117,12 @@
                         </div>
                         <div class="col s12 m6 input-field with-control">
                             <select name="course_id[]">
-                                <option value="1">School</option>
-                                <option value="2">College</option>
-                                <option value="3">PG</option>
+                                @foreach ($courses as $course)
+                                <option value="{{$course->id}}" source="{{$course->name}}"
+                                @if(old('course_id') == $course->id)
+                                selected
+                                @endif>{{$course->name}}</option>
+                                @endforeach
                             </select>
                             <label class="no-click" for="">Course Completed</label>
                             <div class="remove"><i class="material-icons">close</i></div>
@@ -139,9 +142,12 @@
                         </div>
                         <div class="col s12 m6 input-field with-control">
                             <select name="positions_id[]">
-                                <option value="1">Major</option>
-                                <option value="2">Manager</option>
-                                <option value="3">Teacher</option>
+                                @foreach ($positions as $position)
+                                <option value="{{$position->id}}" source="{{$position->name}}"
+                                @if(old('positions_id') == $position->id)
+                                selected
+                                @endif>{{$position->name}}</option>
+                                @endforeach
                             </select>
                             <label class="no-click" for="">Position</label>
                             <div class="remove"><i class="material-icons">close</i></div>
@@ -171,26 +177,31 @@
                     <div class="row">
                         <div class="col s12 m6 input-field">
                             <select name="music_id">
-                                <option value="1">Song 1</option>
-                                <option value="2">Song 2</option>
-                                <option value="3">Song 3</option>
+                                @foreach ($musics as $music)
+                                <option value="{{$music->id}}" source="{{$music->name}}"
+                                @if(old('positions_id') == $music->id)
+                                selected
+                                @endif>{{$music->name}}</option>
+                                @endforeach
                             </select>
                             <label class="no-click" for="">Select memorial page background music</label>
                         </div>
                         <div class="col s12 m6 input-field">
-                            <button class="waves-effect waves-light btn brown darken-4"><i class="material-icons left">play_arrow</i> Play</button>
+                            <audio id="player" controls="controls">
+                              <source id="mp3_src" src="" type="audio/mp3" />
+                              Your browser does not support the audio element.
+                            </audio>
+                            <!-- <button class="waves-effect waves-light btn brown darken-4"><i class="material-icons left">play_arrow</i> Play</button> -->
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
                             <label class="form-label">Select memorial page header background</label>
                             <div class="theme-chooser">
-                                <div class="item active"><img src="https://placeimg.com/300/150/nature/1" alt=""></div>
-                                <div class="item"><img src="https://placeimg.com/300/150/nature/2" alt=""></div>
-                                <div class="item"><img src="https://placeimg.com/300/150/nature/3" alt=""></div>
-                                <div class="item"><img src="https://placeimg.com/300/150/nature/4" alt=""></div>
-                                <div class="item"><img src="https://placeimg.com/300/150/nature/5" alt=""></div>
-                                <div class="item"><img src="https://placeimg.com/300/150/nature/6" alt=""></div>
+                                @foreach ($themes as $theme)
+                                <div class="item active"><img src="{{$theme->theme_img}}" alt=""> </div>
+                                <div><input type="radio" name="theme_id" value="{{$theme->id}}"> {{$theme->name}}</div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -198,10 +209,12 @@
                     <div class="row">
                         <div class="col s12 m6 offset-m3 input-field">
                             <select name="relation_id">
-                                <option value="1">Brother</option>
-                                <option value="2">Sister</option>
-                                <option value="2">Son</option>
-                                <option value="2">Daughter</option>
+                                @foreach ($relations as $relation)
+                                <option value="{{$relation->id}}" source="{{$relation->name}}"
+                                @if(old('relation_id') == $relation->id)
+                                selected
+                                @endif>{{$relation->name}}</option>
+                                @endforeach
                             </select>
                             <label class="no-click" for="">Submitter's relationship with the deceased</label>
                         </div>
@@ -248,17 +261,20 @@
                 <div class="step-content">
                     <div class="title-3">Add Photos</div>
                     <div class="row">
+                        <form id="imageForm" enctype="multipart/form-data">
+                            <input type="hidden" name="memorial_id" value="1">
                         <div class="col s12 m4 file-field input-field">
                             <div class="btn"><span>File</span>
-                                <input type="file">
+                                <input type="file" id="userImage" name="userImage" accept="image/*">
                             </div>
                             <div class="file-path-wrapper">
-                                <input class="file-path validate"  type="text" name="first_name" placeholder="Select Photos">
+                                <input class="file-path validate"  type="text" placeholder="Select Photos">
                             </div>
                         </div>
                         <div class="col m2">
-                            <button class="btn brown darken-3 mt-15"><i class="material-icons">add</i></button>
+                            <button class="btn brown darken-3 mt-15" type="submit"><i class="material-icons">add</i></button>
                         </div>
+                        </form>
                     </div>
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="title-3">Add Videos</div>
@@ -275,14 +291,20 @@
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="title-3">Add Audios</div>
                     <div class="row">
+                        <form id="audioForm" enctype="multipart/form-data">
+                            <input type="hidden" name="memorial_id" value="1">
                         <div class="col s12 m4 file-field input-field">
                             <div class="btn"><span>File</span>
-                                <input type="file">
+                                <input type="file" id="userAudio" name="userAudio" type="audio/mp3" accept="audio/*">
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate"  type="text" name="first_name" placeholder="Select Audios">
                             </div>
                         </div>
+                        <div class="col m2">
+                            <button class="btn brown darken-3 mt-15" type="submit"><i class="material-icons">add</i></button>
+                        </div>
+                    </form>
                     </div>
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="step-actions">
@@ -356,6 +378,58 @@ $(document).ready(function(e){
             }
         });
     });
+    $("#imageForm").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('image_upload') }}",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend: function(){
+               // $('.submitBtn').attr("disabled","disabled");
+               // $('#memorialForm').css("opacity",".5");
+            },
+            success: function(msg){
+                $('.statusMsg').html('');
+                if(msg == 'ok'){
+                    $('#imageForm')[0].reset();
+                    $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
+                }else{
+                    $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+                }
+                $('#imageForm').css("opacity","");
+                $(".submitBtn").removeAttr("disabled");
+            }
+        });
+    });
+    $("#audioForm").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('audio_upload') }}",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend: function(){
+               // $('.submitBtn').attr("disabled","disabled");
+               // $('#memorialForm').css("opacity",".5");
+            },
+            success: function(msg){
+                $('.statusMsg').html('');
+                if(msg == 'ok'){
+                    $('#audioForm')[0].reset();
+                    $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
+                }else{
+                    $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+                }
+                $('#audioForm').css("opacity","");
+                $(".submitBtn").removeAttr("disabled");
+            }
+        });
+    });
 
     $("#relation").click(function(){
         var clone = $("#more_relation").clone();
@@ -390,6 +464,21 @@ $(document).ready(function(e){
             return false;
         }
     });
+    change( $('#music_id option:selected').attr('source'));
+    $('#music_id').on('change', function(){
+        change( $('#music_id option:selected').attr('source'));
+    });
+    function change(sourceUrl) {
+        var audio = document.getElementById("player"),
+                source = document.getElementById("mp3_src");
+        source.src = sourceUrl;
+        audio.pause();
+        audio.load();
+        // audio.play();
+     }
+     $("input").click(function(){
+        alert();
+     });
 });
 </script>
 @endsection

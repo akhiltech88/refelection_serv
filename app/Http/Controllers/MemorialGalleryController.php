@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\MemmorialGallery;
-use App\MemmorialPackage;
+use App\MemorialGallery;
+use App\MemorialPackage;
+use App\MemorialAccount;
 use Auth;
 use Validator;
 use Response;
+use FFMpeg;
+use URL;
 
 class MemorialGalleryController extends Controller
 {
@@ -26,8 +29,8 @@ class MemorialGalleryController extends Controller
                 );
                 return response($response, 200);
         }else{
-           $photo_dt = MemmorialPackage::with('package')->whereMemorialId($request->memorial_id)->first();
-           $gall_cnt = MemmorialGallery::whereType(1)
+           $photo_dt = MemorialPackage::with('package')->whereMemorialId($request->memorial_id)->first();
+           $gall_cnt = MemorialGallery::whereType(1)
                     ->where('memorial_id',$request->memorial_id)
                     ->count();
            if( intval($photo_dt->package->value) <=  intval($gall_cnt) ){
@@ -52,7 +55,7 @@ class MemorialGalleryController extends Controller
             $name = "photo".time();
             $extension1 = $request->userImage->extension();
             $request->file('userImage')->move(public_path().'/gallery',$name.".".$extension1);
-            $gallery = new MemmorialGallery;
+            $gallery = new MemorialGallery;
             if(Auth::check()){
         		$gallery->users_id = Auth::user()->id;
         	}else{
@@ -82,6 +85,58 @@ class MemorialGalleryController extends Controller
         );
         return response($response, 200);
     }
+    public function audioUpload(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'userAudio' => 'required | mimes:mp3,ogg,wav,mpga,ogx',
+        ]);
+        if ($validator->fails()) {
+            $response = array(
+                'success' => 'false',
+                'code' => 422,
+                'message' => "Audio must be of mp3,ogg,wav,mpga"
+            );
+            return response($response, 200);
+        }
+        if ($request->hasFile('userAudio')) {
+            $name = "audio".time();
+            $extension1 = $request->userAudio->extension();
+            $orginalname = $request->userAudio->getClientOriginalName();
+            $orginalname = pathinfo($orginalname, PATHINFO_FILENAME);
+            $orginalname = ucwords(str_replace("_", " ", $orginalname));
+            $request->file('userAudio')->move(public_path().'/gallery',$name.".".$extension1);
+            $gallery = new MemorialGallery;
+            if(Auth::check()){
+                $gallery->users_id = Auth::user()->id;
+            }else{
+                $gallery->users_id = 2;
+            }
+            $gallery->type = 0;
+            //$gallery->title = $orginalname ;
+            $gallery->memorial_id = $request->memorial_id;
+            $gallery->media_url = "gallery/".$name.".mp3";
+            $gallery->save();
+        }
+        /*$ffmpeg = FFMpeg\FFMpeg::create();
+        $audio = $ffmpeg->open("gallery/".$name.".".$extension1);
+
+        $format = new FFMpeg\Format\Audio\Mp3();
+
+        $format
+            ->setAudioChannels(2)
+            ->setAudioKiloBitrate(100);
+
+        $audio->save($format, "gallery/".$name .".mp3");
+            
+        $data = '<div class="col-md-6"><h5>'.$orginalname .'</h5><audio controls="controls">
+                                    <source src="'.$gallery->media_url.'" type="audio/mp3"></audio></div>';*/
+        $response = array(
+            'success' => 'true',
+            'code' => 200,
+            'data' => 'Success'
+        );
+        return response($response, 200);
+    }
     public function deleteMedia(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -91,7 +146,7 @@ class MemorialGalleryController extends Controller
         if ($validator->fails()) {
             return back();
         }else{
-            $gallery = MemmorialGallery::Where('id', $request->gallery_id);
+            $gallery = MemorialGallery::Where('id', $request->gallery_id);
             $gallery->delete();
             return redirect('profile/'.$request->domain);
         }
