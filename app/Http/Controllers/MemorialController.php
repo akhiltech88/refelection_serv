@@ -9,6 +9,7 @@ use App\Music;
 use App\Country;
 use App\Position;
 use App\Course;
+use App\Package;
 use Auth;
 use Validator;
 use Response;
@@ -23,12 +24,14 @@ class MemorialController extends Controller
         $relations = Relation::all();
         $positions = Position::all();
         $courses = Course::all();
+        $packages = Package::with('package_features')->get();
         return view('create-memorial')
             ->withThemes($themes)
             ->withMusics($musics)
             ->withCountries($country)
             ->withPositions($positions)
             ->withCourses($courses)
+            ->withPackages($packages)
             ->withRelations($relations);
     }
     public function saveMemorial(Request $request)

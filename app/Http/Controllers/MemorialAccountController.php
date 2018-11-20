@@ -45,7 +45,6 @@ class MemorialAccountController extends Controller
             'birth_country'=> 'required|integer'
         ]);
         if ($validator->fails()) {
-            return"aaaaa";
             return back()->withInput()->withErrors($validator);
         }else{
             if ($request->hasFile('file')) {
@@ -141,6 +140,18 @@ class MemorialAccountController extends Controller
                     $i++;
                 }
             }
+            $mem_package = new MemorialPackage();
+            $mem_package->memorial_id = $mem_account->id;
+            $mem_package->package_id = $request->package_id;
+            $mem_package->status = 0;
+            $mem_package->save();
+            $response = array(
+                'success' => 'true',
+                'code' => 200,
+                'data' => $request->package_id,
+                'memorial_id' => $mem_account->id
+            );
+            return response($response, 200);
         }else{
 
         }    

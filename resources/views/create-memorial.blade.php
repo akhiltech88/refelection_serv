@@ -12,7 +12,7 @@
                     <div class="title-3">Personal Details</div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="first_name">
+                            <input  type="text" name="first_name" class="validate" required="" aria-required="true">
                             <label class="no-click" for="">First Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
@@ -231,38 +231,30 @@
                             <div class="mb-10">
                                 <label class="form-label">Choose any one of option form below</label>
                             </div>
+                            @foreach ($packages as $package)
                             <p>
                                 <label>
-                                    <input name="plan" type="radio" checked=""><span>Price : £ 299 (£ 1.92 per week), Duration : 3 Years</span>
+                                    <input name="package_id" type="radio" value="{{$package->id}}" checked=""><span>Price : £ {{$package->price}} , Duration : {{$package->years}} Years</span>
                                 </label>
                             </p>
-                            <p>
-                                <label>
-                                    <input name="plan" type="radio"><span>Price : £405 (£1.56 per week), Duration: 5 Years</span>
-                                </label>
-                            </p>
-                            <p>
-                                <label>
-                                    <input name="plan" type="radio"><span>Price : £520 (£1 per week), Duration : 10 Year</span>
-                                </label>
-                            </p>
+                            @endforeach
                         </div>
                     </div>
                     <div class="p-10"></div>
                     <div class="step-actions">
-                        <input type="submit" name="submit" class="btn btn-danger submitBtn" value="SAVE"/>
-                        <button type="submit" class="waves-effect waves-dark btn brown darken-3 next-step" data-feedback="anyThing">Continue</button>
+                          <input type="submit" name="submit" class="btn-large brown darken-3 white-text" value="Continue"/>
+                        <!-- <button type="submit" class="waves-effect waves-dark btn brown darken-3 next-step" data-feedback="saveContinue">Continue</button> -->
                     </div>
                 </div>
             </form>
             </li>
             <li class="step">
-                <div class="step-title waves-effect waves-dark">Memorial Gallery</div>
+                <div class="step-title waves-effect waves-dark" id="step2">Memorial Gallery</div>
                 <div class="step-content">
                     <div class="title-3">Add Photos</div>
                     <div class="row">
                         <form id="imageForm" enctype="multipart/form-data">
-                            <input type="hidden" name="memorial_id" value="1">
+                            <input type="hidden" id="im_memorial" name="memorial_id" value="1">
                         <div class="col s12 m4 file-field input-field">
                             <div class="btn"><span>File</span>
                                 <input type="file" id="userImage" name="userImage" accept="image/*">
@@ -276,6 +268,7 @@
                         </div>
                         </form>
                     </div>
+                    <div id="vid_aud">
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="title-3">Add Videos</div>
                     <div class="row">
@@ -306,6 +299,7 @@
                         </div>
                     </form>
                     </div>
+                </div>
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="step-actions">
                         <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
@@ -322,7 +316,7 @@
             <p>Please register to continue</p>
             <div class="row">
                 <div class="input-field col s12"><i class="material-icons prefix">account_circle</i>
-                    <input class="validate" id="first_name"  type="text" name="first_name">
+                    <input class="validate" id="first_name" type="text">
                     <label for="first_name">Name</label>
                 </div>
                 <div class="input-field col s12"><i class="material-icons prefix">mail_outline</i>
@@ -353,6 +347,8 @@
     </script>
     <script>
 $(document).ready(function(e){
+    $("#vid_aud").hide();
+    //$("#continue").hide();
     $("#memorialForm").on('submit', function(e){
         e.preventDefault();
         $.ajax({
@@ -367,17 +363,26 @@ $(document).ready(function(e){
                // $('#memorialForm').css("opacity",".5");
             },
             success: function(msg){
-                $('.statusMsg').html('');
-                if(msg == 'ok'){
+                if(msg.success){
+                    $( "#step2" ).trigger( "click" );
+                    $("#im_memorial").val(msg.memorial_id);
+                    if(msg.data==3){
+                        $("#vid_aud").show();
+                    }
+                }
+                /*$('.statusMsg').html('');
+                if(msg == 'ok'){console.log(msg);
+                    destroyFeedback(true);
                     $('#memorialForm')[0].reset();
                     $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
                 }else{
                     $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
                 }
                 $('#memorialForm').css("opacity","");
-                $(".submitBtn").removeAttr("disabled");
+                $(".submitBtn").removeAttr("disabled");*/
             }
         });
+        
     });
     $("#imageForm").on('submit', function(e){
         e.preventDefault();
@@ -477,11 +482,53 @@ $(document).ready(function(e){
         audio.load();
         // audio.play();
      }
-     $("input").click(function(){
+     /*$("input").click(function(){
         var elems = document.getElementById('register');
             var register_model = M.Modal.init(elems, {});
             register_model.open(); 
-     });
+     });*/
 });
+function getFormData($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    return indexed_array;
+}
+function saveContinue(destroyFeedback) {
+    /*$("#memorialForm").on('submit', function(e){
+        e.preventDefault();alert(2);*/
+        var $form = $("#memorialForm");
+var data = getFormData($form);
+        console.log(data);
+    $.ajax({
+            type: "POST",
+            url: "{{ url('memorials') }}",
+            data: $("#memorialForm").serialize(),
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend: function(){
+               // $('.submitBtn').attr("disabled","disabled");
+               // $('#memorialForm').css("opacity",".5");
+            },
+            success: function(msg){console.log(msg);
+                /*$('.statusMsg').html('');
+                if(msg == 'ok'){console.log(msg);
+                    destroyFeedback(true);
+                    $('#memorialForm')[0].reset();
+                    $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
+                }else{
+                    $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+                }
+                $('#memorialForm').css("opacity","");
+                $(".submitBtn").removeAttr("disabled");*/
+            }
+        });
+//});
+}
 </script>
 @endsection
