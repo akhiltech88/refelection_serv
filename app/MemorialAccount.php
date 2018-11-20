@@ -8,19 +8,31 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MemorialAccount extends Model
 {
     use SoftDeletes;
-    public function gallery(){
-    	return $this->hasMany('App\MemorialGallery','package_id','package_id');
+    public function photos(){
+    	return $this->hasMany('App\MemorialGallery','memorial_id','id')->whereType(1);
+    }
+    public function theme(){
+        return $this->hasOne('App\Theme','id','theme_id');
+    }
+    public function audio(){
+        return $this->hasMany('App\MemorialGallery','memorial_id','id')->whereType(0);
+    }
+    public function video(){
+        return $this->hasMany('App\MemorialGallery','memorial_id','id')->whereType(2);
     }
     public function education(){
-    	return $this->hasMany('App\MemorialEducation','package_id','package_id');
+    	return $this->hasMany('App\MemorialEducation','memorial_id','id');
     }
     public function family(){
-    	return $this->hasMany('App\MemorialFamily','package_id','package_id');
+    	return $this->hasMany('App\MemorialFamily','memorial_id','id');
     }
     public function tribute(){
-    	return $this->hasMany('App\MemorialTribute','package_id','package_id');
+    	return $this->hasMany('App\MemorialTribute','memorial_id','id');
     }
     public function position(){
-    	return $this->hasMany('App\MemorialPosition','package_id','package_id');
+    	return $this->hasMany('App\MemorialPosition','memorial_id','id');
+    }
+    public function by_birth(){
+        return $this->hasOne('App\Country','id','birth_country');
     }
 }

@@ -17,6 +17,13 @@
 
 Route::get('/', 'HomeController@index');
 Route::get('create-memorials', 'MemorialController@createMemorial');
+Route::get('contact', 'MemorialController@contact');
+Route::get('memorial-wall', 'MemorialController@memorialWall');
+Route::get('memorial-page/{id}', 'MemorialController@memorialPage');
+Route::get('price', 'MemorialController@price');
+Route::get('about-us', 'MemorialController@aboutUs');
+
+
 Route::apiResource('memorials', 'MemorialAccountController');
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::post('image_upload','MemorialGalleryController@imageUpload');

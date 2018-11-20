@@ -16,21 +16,21 @@
                             <label class="no-click" for="">First Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="firstmiddle_name_name">
+                            <input  type="text" name="firstmiddle_name_name" class="validate" required="" aria-required="true">
                             <label class="no-click" for="">Middle Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="last_name">
+                            <input  type="text" name="last_name" class="validate" required="" aria-required="true">
                             <label class="no-click" for="">Last Name</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input class="datepicker"  type="text" name="dob">
+                            <input class="datepicker"  type="text" name="dob" class="validate" required="" aria-required="true">
                             <label class="no-click" for="">Date of Birth</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <select name="birth_country">
+                            <select name="birth_country" class="validate" required="" aria-required="true">
                                 @foreach ($countries as $country)
                                 <option value="{{$country->id}}" source="{{$country->name}}"
                                 @if(old('birth_country') == $country->id)
@@ -41,17 +41,17 @@
                             <label class="no-click" for="">Country of birth</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="birth_city">
+                            <input  type="text" name="birth_city" class="validate" required="" aria-required="true">
                             <label class="no-click" for="">City of birth</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input class="datepicker"  type="text" name="passed_date">
+                            <input class="datepicker"  type="text" name="passed_date" class="validate" required="" aria-required="true">
                             <label class="no-click" for="">Date of Deceases</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <select type="text" name="passed_country">
+                            <select type="text" name="passed_country" class="validate" required="" aria-required="true">
                                 @foreach ($countries as $country)
                                 <option value="{{$country->id}}" source="{{$country->name}}"
                                 @if(old('passed_country') == $country->id)
@@ -62,13 +62,13 @@
                             <label class="no-click" for="">Country of Deceases</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="passed_city">
+                            <input  type="text" name="passed_city" class="validate" required="" aria-required="true">
                             <label class="no-click" for="">City of Deceases</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <select name="gender">
+                            <select name="gender" class="validate" required="" aria-required="true">
                                 <option value="1">Male</option>
                                 <option value="2">Female</option>
                                 <option value="3">Others</option>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="col s12 m4 file-field input-field">
                             <div class="btn"><span>File</span>
-                                <input type="file" id="file" name="file" accept="image/*">
+                                <input type="file" id="file" name="file" accept="image/*" class="validate" required="" aria-required="true">
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate"  type="text" name="photo" placeholder="Personal Photograph">
@@ -199,8 +199,8 @@
                             <label class="form-label">Select memorial page header background</label>
                             <div class="theme-chooser">
                                 @foreach ($themes as $theme)
-                                <div class="item active"><img src="{{$theme->theme_img}}" alt=""> </div>
-                                <div><input type="radio" name="theme_id" value="{{$theme->id}}"> {{$theme->name}}</div>
+                                <div class="item active"><img src="{{$theme->theme_img}}" alt="" style="width: 100%;height: 100%"> 
+                                <label><input name="theme_id" type="radio" value="{{$theme->id}}"></label></div>
                                 @endforeach
                             </div>
                         </div>
@@ -272,13 +272,12 @@
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="title-3">Add Videos</div>
                     <div class="row">
-                        <div class="col s12 m4 file-field input-field">
-                            <div class="btn"><span>File</span>
-                                <input type="file">
-                            </div>
-                            <div class="file-path-wrapper">
-                                <input class="file-path validate"  type="text" name="first_name" placeholder="Select Videos">
-                            </div>
+                        <div class="col s12 m6 input-field">
+                            <input type="text" name="video_url">
+                            <label class="no-click" for="">Video Url</label>
+                        </div>
+                        <div class="col m2">
+                            <button class="btn brown darken-3 mt-15" type="submit"><i class="material-icons">add</i></button>
                         </div>
                     </div>
                     <div class="hr-dotted mb-25 mt-15"></div>
@@ -288,7 +287,7 @@
                             <input type="hidden" name="memorial_id" value="1">
                         <div class="col s12 m4 file-field input-field">
                             <div class="btn"><span>File</span>
-                                <input type="file" id="userAudio" name="userAudio" type="audio/mp3" accept="audio/*">
+                                <input type="file" id="userAudio" id="au_memorial" name="userAudio" type="audio/mp3" accept="audio/*">
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate"  type="text" name="first_name" placeholder="Select Audios">
@@ -368,6 +367,7 @@ $(document).ready(function(e){
                     $("#im_memorial").val(msg.memorial_id);
                     if(msg.data==3){
                         $("#vid_aud").show();
+                        $("#au_memorial").val(msg.memorial_id);
                     }
                 }
                 /*$('.statusMsg').html('');

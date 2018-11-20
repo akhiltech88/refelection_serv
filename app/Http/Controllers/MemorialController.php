@@ -10,6 +10,7 @@ use App\Country;
 use App\Position;
 use App\Course;
 use App\Package;
+use App\MemorialAccount;
 use Auth;
 use Validator;
 use Response;
@@ -33,6 +34,33 @@ class MemorialController extends Controller
             ->withCourses($courses)
             ->withPackages($packages)
             ->withRelations($relations);
+    }
+    public function contact(Request $request)
+    {
+        
+        return view('contact');
+    }
+    public function price(Request $request)
+    {
+        
+        return view('price');
+    }
+    public function memorialWall(Request $request)
+    {
+        $mem_account = MemorialAccount::with('by_birth')->get();
+        return view('memorial-wall')
+            ->withMemorials($mem_account);
+    }
+    public function memorialPage($id){
+        $mem_account = MemorialAccount::with('theme')->with('by_birth')->with('photos')->with('audio')->with('video')->with('education.mem_course')->with('family.mem_relation')->with('position')->find($id);
+        //$mem_account = $mem_account->with('by_birth')->with('gallery')->with('education.mem_course')->with('family.mem_relation')->with('position')->first();
+        return view('memorial-page')
+            ->withMemorial($mem_account);
+    }
+    public function aboutUs(Request $request)
+    {
+        
+        return view('about-us');
     }
     public function saveMemorial(Request $request)
     {

@@ -7,4 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MemorialFamily extends Model
 {
     use SoftDeletes;
+    public function mem_relation(){
+        return $this->hasOne('App\Relation','id','relations_id');
+    }
 }

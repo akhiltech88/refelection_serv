@@ -24,6 +24,8 @@ class MemorialAccountController extends Controller
     public function index()
     {
         $mem_account = MemorialAccount::with('gallery')->with('education')->with('family')->with('position')->get();
+        return view('memorial-wall')
+            ->withMemorials($mem_account);
     }
 
     /**
