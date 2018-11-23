@@ -16,7 +16,7 @@
                             <label class="no-click" for="">First Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="firstmiddle_name_name" class="validate" required="" aria-required="true">
+                            <input  type="text" name="firstmiddle_name_name" class="validate">
                             <label class="no-click" for="">Middle Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
@@ -199,8 +199,11 @@
                             <label class="form-label">Select memorial page header background</label>
                             <div class="theme-chooser">
                                 @foreach ($themes as $theme)
-                                <div class="item active"><img src="{{$theme->theme_img}}" alt="" style="width: 100%;height: 100%"> 
-                                <label><input name="theme_id" type="radio" value="{{$theme->id}}"></label></div>
+                                <div class="item">
+                                    <label>
+                                        <img src="{{$theme->theme_img}}" alt="" style="width: 100%;height: 100%"> 
+                                        <input name="theme_id" type="radio" class="browser-default" value="{{$theme->id}}"></label>
+                                    </div>
                                 @endforeach
                             </div>
                         </div>
@@ -260,18 +263,26 @@
                                 <input type="file" id="userImage" name="userImage" accept="image/*">
                             </div>
                             <div class="file-path-wrapper">
-                                <input class="file-path validate"  type="text" placeholder="Select Photos">
+                                <input class="file-path validate" id="imageTxt"  type="text" placeholder="Select Photos">
                             </div>
                         </div>
                         <div class="col m2">
                             <button class="btn brown darken-3 mt-15" type="submit"><i class="material-icons">add</i></button>
                         </div>
                         </form>
+                        <div class="col s12" id="showImages" style="display: none;">
+                            <label class="form-label">Gallery Images</label>
+                            <div class="theme-chooser" id="image_prepend">
+
+                            </div>
+                        </div>
                     </div>
                     <div id="vid_aud">
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="title-3">Add Videos</div>
                     <div class="row">
+                        <form id="videoForm" enctype="multipart/form-data">
+                        <input type="hidden" id="vid_memorial" name="memorial_id" value="1">
                         <div class="col s12 m6 input-field">
                             <input type="text" name="video_url">
                             <label class="no-click" for="">Video Url</label>
@@ -279,12 +290,13 @@
                         <div class="col m2">
                             <button class="btn brown darken-3 mt-15" type="submit"><i class="material-icons">add</i></button>
                         </div>
+                        </form>
                     </div>
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="title-3">Add Audios</div>
                     <div class="row">
                         <form id="audioForm" enctype="multipart/form-data">
-                            <input type="hidden" name="memorial_id" value="1">
+                            <input type="hidden" id="aud_memorial" name="memorial_id" value="1">
                         <div class="col s12 m4 file-field input-field">
                             <div class="btn"><span>File</span>
                                 <input type="file" id="userAudio" id="au_memorial" name="userAudio" type="audio/mp3" accept="audio/*">
@@ -302,7 +314,7 @@
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="step-actions">
                         <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
-                        <button class="waves-effect waves-dark btn brown darken-3 next-step">PAYMENT</button>
+                        <button id="payment" class="waves-effect waves-dark btn brown darken-3 next-step">PAYMENT</button>
                     </div>
                 </div>
             </li>
@@ -365,6 +377,8 @@ $(document).ready(function(e){
                 if(msg.success){
                     $( "#step2" ).trigger( "click" );
                     $("#im_memorial").val(msg.memorial_id);
+                    $("#aud_memorial").val(msg.memorial_id);
+                    $("#vid_memorial").val(msg.memorial_id);
                     if(msg.data==3){
                         $("#vid_aud").show();
                         $("#au_memorial").val(msg.memorial_id);
@@ -398,15 +412,36 @@ $(document).ready(function(e){
                // $('#memorialForm').css("opacity",".5");
             },
             success: function(msg){
-                $('.statusMsg').html('');
-                if(msg == 'ok'){
-                    $('#imageForm')[0].reset();
-                    $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
+                if(msg.success=='true'){
+                $("#showImages").show();
+                $("#image_prepend").prepend(msg.data);
+                $('#imageTxt').val("");
+                $('#userImage').val("");
                 }else{
-                    $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+                    alert(msg.message);
                 }
-                $('#imageForm').css("opacity","");
-                $(".submitBtn").removeAttr("disabled");
+            }
+        });
+    });
+    $("#videoForm").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('video_upload') }}",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend: function(){
+               // $('.submitBtn').attr("disabled","disabled");
+               // $('#memorialForm').css("opacity",".5");
+            },
+            success: function(msg){
+                if(msg.success=='false'){
+                    alert(msg.message);
+                }else{
+                    
+                }
             }
         });
     });
@@ -437,9 +472,15 @@ $(document).ready(function(e){
         });
     });
 
+    $("#payment").on('click', function(e){
+    window.open('http://quiet-reflections.com/public/memorial-wall','_self');
+    });
+
     $("#relation").click(function(){
         var clone = $("#more_relation").clone();
+        var input= '<input  type="text" name="relations_name[]">';
         var select = clone.find('select').clone();
+        clone.find('input').replaceWith(input);
         clone.find('.select-wrapper').replaceWith(select);
         $('.more_relation').append(clone);
         clone.find('select').formSelect();
@@ -447,6 +488,8 @@ $(document).ready(function(e){
     $("#education").click(function(){
         var clone = $("#more_education").clone();
         var select = clone.find('select').clone();
+        var input= '<input  type="text" name="course_name[]">';
+        clone.find('input').replaceWith(input);
         clone.find('.select-wrapper').replaceWith(select);
         $('.more_education').append(clone);
         clone.find('select').formSelect();
@@ -454,6 +497,8 @@ $(document).ready(function(e){
     $("#employment").click(function(){
         var clone = $("#more_employment").clone();
         var select = clone.find('select').clone();
+        var input= '<input  type="text" name="organisation[]">';
+        clone.find('input').replaceWith(input);
         clone.find('.select-wrapper').replaceWith(select);
         $('.more_employment').append(clone);
         clone.find('select').formSelect();

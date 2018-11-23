@@ -77,7 +77,7 @@ class MemorialGalleryController extends Controller
             }
             imagejpeg($image, "gallery/".$name.".".$extension1, 60);
         }
-        $data = '<div class="col-sm-3"><a href="'.$gallery->media_url.'" data-lightbox="image-1"><img src="'.$gallery->media_url.'"></a></div>';
+        $data = '<div class="item" ><label><img style="width: 100%;height: 100%" src="'.$gallery->media_url.'"></label></div>';
         $response = array(
             'success' => 'true',
             'code' => 200,
@@ -131,6 +131,37 @@ class MemorialGalleryController extends Controller
         $data = '<div class="col-md-6"><h5>'.$orginalname .'</h5><audio controls="controls">
                                     <source src="'.$gallery->media_url.'" type="audio/mp3"></audio></div>';*/
         $response = array(
+            'success' => 'true',
+            'code' => 200,
+            'data' => 'Success'
+        );
+        return response($response, 200);
+    }
+    public function videoUpload(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'video_url' => 'required',
+        ]);
+        if ($validator->fails()) {
+            $response = array(
+                'success' => 'false',
+                'code' => 422,
+                'message' => "Video Url Required!"
+            );
+            return response($response, 200);
+        }
+        $gallery = new MemorialGallery;
+            if(Auth::check()){
+                $gallery->users_id = Auth::user()->id;
+            }else{
+                $gallery->users_id = 2;
+            }
+            $gallery->type = 2;
+            //$gallery->title = $orginalname ;
+            $gallery->memorial_id = $request->memorial_id;
+            $gallery->media_url = $request->video_url;
+            $gallery->save();
+            $response = array(
             'success' => 'true',
             'code' => 200,
             'data' => 'Success'
