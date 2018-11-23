@@ -100,7 +100,7 @@
                                 @endforeach
                             </select>
                             <label class="no-click" for="">Relation</label>
-                            <div class="remove"><i class="material-icons">close</i></div>
+                            <div class="remove" onclick="family_remove()" style="cursor: pointer;"><i class="material-icons">close</i></div>
                         </div>
                     </div>
                     <div class="more_relation"></div>
@@ -125,7 +125,7 @@
                                 @endforeach
                             </select>
                             <label class="no-click" for="">Course Completed</label>
-                            <div class="remove"><i class="material-icons">close</i></div>
+                            <div class="remove" onclick="education_remove()" style="cursor: pointer;"><i class="material-icons">close</i></div>
                         </div>
                     </div>
                     <div class="more_education"></div>
@@ -150,7 +150,7 @@
                                 @endforeach
                             </select>
                             <label class="no-click" for="">Position</label>
-                            <div class="remove"><i class="material-icons">close</i></div>
+                            <div class="remove" onclick="employment_remove()" style="cursor: pointer;"><i class="material-icons">close</i></div>
                         </div>
                     </div>
                     <div class="more_employment"></div>
@@ -543,6 +543,32 @@ function getFormData($form){
 
     return indexed_array;
 }
+function employment_remove(){
+    var in_length = $("[name='organisation[]']").length;
+    if(in_length>1){
+        $(event.target).closest("#more_employment").remove();       
+    }else{
+        alert("Need Minimum Fields!!");
+    }
+}
+function education_remove(){
+    var in_length = $("[name='course_name[]']").length;
+    if(in_length>1){
+        $(event.target).closest("#more_education").remove();       
+    }else{
+        alert("Need Minimum Fields!!");
+    }
+}
+function family_remove(){
+    var in_length = $("[name='relations_name[]']").length;
+    if(in_length>1){
+        $(event.target).closest("#more_relation").remove();
+    }else{
+        alert("Need Minimum Fields!!");
+    }
+}
+
+
 function saveContinue(destroyFeedback) {
     /*$("#memorialForm").on('submit', function(e){
         e.preventDefault();alert(2);*/
