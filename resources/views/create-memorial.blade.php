@@ -12,25 +12,25 @@
                     <div class="title-3">Personal Details</div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="first_name" class="validate" required="" aria-required="true">
+                            <input  type="text" name="first_name" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">First Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="firstmiddle_name_name" class="validate">
+                            <input  type="text" name="firstmiddle_name_name" class="validate reg_click">
                             <label class="no-click" for="">Middle Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="last_name" class="validate" required="" aria-required="true">
+                            <input  type="text" name="last_name" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">Last Name</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input class="datepicker"  type="text" name="dob" class="validate" required="" aria-required="true">
+                            <input class="datepicker"  type="text" name="dob" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">Date of Birth</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <select name="birth_country" class="validate" required="" aria-required="true">
+                            <select name="birth_country" class="validate reg_click" required="" aria-required="true">
                                 @foreach ($countries as $country)
                                 <option value="{{$country->id}}" source="{{$country->name}}"
                                 @if(old('birth_country') == $country->id)
@@ -321,40 +321,15 @@
         </ul>
         <div class="p-25"></div>
     </div>
-    <div class="modal modal-fixed-footer" id="register">
-        <div class="modal-content">
-            <h4>Register</h4>
-            <p>Please register to continue</p>
-            <div class="row">
-                <div class="input-field col s12"><i class="material-icons prefix">account_circle</i>
-                    <input class="validate" id="first_name" type="text">
-                    <label for="first_name">Name</label>
-                </div>
-                <div class="input-field col s12"><i class="material-icons prefix">mail_outline</i>
-                    <input class="validate" id="email" type="email">
-                    <label for="email">Email</label>
-                </div>
-                <div class="input-field col s12"><i class="material-icons prefix">lock</i>
-                    <input class="validate" id="pass" type="password">
-                    <label for="pass">Password</label>
-                </div>
-                <div class="input-field col s12"><i class="material-icons prefix">lock</i>
-                    <input class="validate" id="c_pass" type="password">
-                    <label for="c_pass">Confirm Password</label>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer"><a class="modal-close waves-effect waves-green btn-flat" href="#!">SEND</a></div>
-    </div>
     <script>
-        $(function() {
+        /*$(function() {
             var elems = document.getElementById('register');
             var register_model = M.Modal.init(elems, {});
             //register_model.open();
             $('#save_btn').click(function() {
                 register_model.open();
             })
-        })
+        })*/
     </script>
     <script>
 $(document).ready(function(e){
@@ -372,6 +347,10 @@ $(document).ready(function(e){
             beforeSend: function(){
                // $('.submitBtn').attr("disabled","disabled");
                // $('#memorialForm').css("opacity",".5");
+            },
+            headers: {
+                users_id:localStorage.getItem("users_id"),
+                access_token:localStorage.getItem("users_id")
             },
             success: function(msg){
                 if(msg.success){
@@ -398,6 +377,7 @@ $(document).ready(function(e){
         });
         
     });
+      
     $("#imageForm").on('submit', function(e){
         e.preventDefault();
         $.ajax({
@@ -527,11 +507,14 @@ $(document).ready(function(e){
         audio.load();
         // audio.play();
      }
-     /*$("input").click(function(){
+     $(".reg_click").click(function(){
+        var name = localStorage.getItem("user_name");
+        if (!name) {
         var elems = document.getElementById('register');
             var register_model = M.Modal.init(elems, {});
-            register_model.open(); 
-     });*/
+            register_model.open();
+        } 
+     });
 });
 function getFormData($form){
     var unindexed_array = $form.serializeArray();

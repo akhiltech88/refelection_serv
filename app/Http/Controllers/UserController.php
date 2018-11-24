@@ -39,9 +39,9 @@ class UserController extends Controller
 			}
 			$input = $request->all(); 
 	        $input['password'] = bcrypt($input['password']);
-	        $input['api_token'] = str_random(60);
+	        $input['api_token'] = str_random(200);
 	        $user = User::create($input);
-			return response()->json(['data'=>$user], $this-> successStatus); 
+			return response()->json(['data'=>$user,'success' => 'true'], $this-> successStatus); 
 	    }
 	    public function details() 
 	    { 

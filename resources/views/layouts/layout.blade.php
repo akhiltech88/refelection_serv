@@ -26,7 +26,7 @@
         <div class="container">
             <div class="search-box ml-auto">
                 <input class="browser-default" type="text" placeholder="Search">
-            </div><a class="orange-text">Login</a>
+            </div><a id="log_name1" class="orange-text">Login</a> <a id="log_name" class="orange-text">Login</a>
         </div>
     </div>
     <nav class="white" role="navigation">
@@ -50,6 +50,34 @@
         </div>
     </nav>
     @yield('main-content')
+
+    <div class="modal modal-fixed-footer" id="register">
+        <form id="registerForm">
+        <div class="modal-content">
+            <h4>Register</h4>
+            <p>Please register to continue</p>
+            <div class="row">
+                <div class="input-field col s12"><i class="material-icons prefix">account_circle</i>
+                    <input class="validate" id="name" name="name" type="text">
+                    <label for="name">Name</label>
+                </div>
+                <div class="input-field col s12"><i class="material-icons prefix">mail_outline</i>
+                    <input class="validate" id="email" type="email" name="email">
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-field col s12"><i class="material-icons prefix">lock</i>
+                    <input class="validate" id="password" type="password" name="password">
+                    <label for="pass">Password</label>
+                </div>
+                <div class="input-field col s12"><i class="material-icons prefix">lock</i>
+                    <input class="validate" id="c_password" type="password" name="c_password">
+                    <label for="c_pass">Confirm Password</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"><input type="submit" name="submit" class="btn-large brown darken-3 white-text" value="SEND"/></div>
+    </form>
+    </div>
     <footer class="page-footer white">
         <div class="container">
             <div class="row">
@@ -75,6 +103,43 @@
             </div>
         </div>
     </footer>
+    <script>
+    $(document).ready(function(e){
+        $("#registerForm").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('register') }}",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend: function(){
+               // $('.submitBtn').attr("disabled","disabled");
+               // $('#memorialForm').css("opacity",".5");
+            },
+            success: function(msg){
+                if(msg.success){
+                    localStorage.setItem("token", msg.data.api_token);
+                    localStorage.setItem("user_name", msg.data.name);
+                    localStorage.setItem("users_id", msg.data.id);
+                    console.log('Save');
+                }
+            }
+        });
+        
+    });  
+    });
+    $('#log_name1').hide();
+    $('#log_name').hide();
+    var name = localStorage.getItem("user_name");
+    if (name) {
+        $('#log_name').show();
+        $('#log_name').html(name);
+    } else {
+        $('#log_name1').show();
+    }
+    </script>
 </body>
 
 </html>
