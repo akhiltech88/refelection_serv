@@ -76,7 +76,11 @@ class MemorialAccountController extends Controller
                 }
             }
         }
+        if(!empty($request->memorial_id)){
+            $mem_account = MemorialAccount::find($request->memorial_id);
+        }else{            
         $mem_account = new MemorialAccount();
+        }
         //$mem_account->theme_id = $request->theme_id;
         $mem_account->theme_id = 1;
         $mem_account->music_id = $request->music_id;

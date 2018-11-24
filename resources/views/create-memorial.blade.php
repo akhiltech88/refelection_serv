@@ -7,6 +7,7 @@
             <li class="step active">
 
 <form id="memorialForm" enctype="multipart/form-data">
+    <input type="hidden" id="cm_memorial" name="memorial_id" value="0">
                 <div class="step-title waves-effect waves-dark">Memorial Details</div>
                 <div class="step-content">
                     <div class="title-3">Personal Details</div>
@@ -237,7 +238,7 @@
                             @foreach ($packages as $package)
                             <p>
                                 <label>
-                                    <input name="package_id" type="radio" value="{{$package->id}}" checked=""><span>Price : £ {{$package->price}} , Duration : {{$package->years}} Years</span>
+                                    <input name="package_id" type="radio" value="{{$package->id}}" checked=""  required="" aria-required="true"><span>Price : £ {{$package->price}} , Duration : {{$package->years}} Years</span>
                                 </label>
                             </p>
                             @endforeach
@@ -350,17 +351,20 @@ $(document).ready(function(e){
             },
             headers: {
                 users_id:localStorage.getItem("users_id"),
-                access_token:localStorage.getItem("users_id")
+                access_token:localStorage.getItem("token")
             },
             success: function(msg){
                 if(msg.success){
                     $( "#step2" ).trigger( "click" );
+                    $("#cm_memorial").val(msg.memorial_id);
                     $("#im_memorial").val(msg.memorial_id);
                     $("#aud_memorial").val(msg.memorial_id);
                     $("#vid_memorial").val(msg.memorial_id);
                     if(msg.data==3){
                         $("#vid_aud").show();
                         $("#au_memorial").val(msg.memorial_id);
+                    }else{
+                        $("#vid_aud").hide();
                     }
                 }
                 /*$('.statusMsg').html('');
