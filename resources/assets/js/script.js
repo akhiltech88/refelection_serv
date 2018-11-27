@@ -36,7 +36,9 @@ function openDialog() {
  document.addEventListener('DOMContentLoaded', function () {
      var elems = document.querySelectorAll('.datepicker');
      var datepicker = M.Datepicker.init(elems, {
-         format:'dd-mm-yyyy'
+         format:'dd-mm-yyyy',
+         autoClose: true,
+         yearRange: 100
      });
  });
 

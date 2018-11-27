@@ -16,14 +16,15 @@ class UserController extends Controller
 	        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
 	            $user = Auth::user(); 
 	            $data = array( 
-                        'access_token' => Auth::user()->api_token,
+                        'api_token' => Auth::user()->api_token,
                         'name' => Auth::user()->name,
+                        'id' => Auth::user()->id,
                         'super_admin'  => (Auth::user()->super_admin == 1)? 'true':'false'
                         );
-	            return response()->json(['data' => $data], $this-> successStatus);
+	            return response()->json(['data' => $data,'success' => 'true'], $this-> successStatus);
 	        } 
 	        else{ 
-	            return response()->json(['error'=>'Unauthorised'], 401); 
+	            return response()->json(['error'=>'Unauthorised','success' => 'false'], 401); 
 	        } 
 	    }
 	    public function register(Request $request) 
@@ -41,7 +42,12 @@ class UserController extends Controller
 	        $input['password'] = bcrypt($input['password']);
 	        $input['api_token'] = str_random(200);
 	        $user = User::create($input);
-			return response()->json(['data'=>$user,'success' => 'true'], $this-> successStatus); 
+	        if($user){
+			return response()->json(['data'=>$user,'success' => 'true'], $this-> successStatus);
+			} 
+	        else{ 
+	            return response()->json(['error'=>'Unauthorised','success' => 'false'], 401); 
+	        } 
 	    }
 	    public function details() 
 	    { 

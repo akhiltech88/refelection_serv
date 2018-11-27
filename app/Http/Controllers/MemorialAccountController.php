@@ -81,8 +81,11 @@ class MemorialAccountController extends Controller
         }else{            
         $mem_account = new MemorialAccount();
         }
-        //$mem_account->theme_id = $request->theme_id;
+        if(isset($request->theme_id)){
+        $mem_account->theme_id = $request->theme_id;   
+        }else{
         $mem_account->theme_id = 1;
+        }
         $mem_account->music_id = $request->music_id;
         $mem_account->first_name = $request->first_name;
         $mem_account->middle_name = $request->middle_name;
@@ -132,11 +135,11 @@ class MemorialAccountController extends Controller
                     $i++;
                 }
             }
-            if($request->has('organisation')&&$request->has('positions_id')){
+            if($request->has('organisation')&&$request->has('position')){
                 $i = 0;
                 foreach ($request->organisation as $organisation) {
                     $mem_positions = new MemorialPosition();
-                    $mem_positions->positions_id = $request->positions_id[$i];
+                    $mem_positions->positions = $request->position[$i];
                     $mem_positions->memorial_id = $mem_account->id;
                     $mem_positions->organisation = $organisation;
                    // $mem_positions->descriptions = $request->descriptions;
@@ -196,5 +199,8 @@ class MemorialAccountController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function postPayments(Request $request){
+        
     }
 }

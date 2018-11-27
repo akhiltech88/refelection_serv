@@ -51,6 +51,13 @@
                                         <div class="text">{{$education->stream}}</div>
                                     </div>
                                     @endforeach
+                                    <div class="title-3">Employment</div>
+                                    @foreach ($memorial->position as $position)
+                                    <div class="details-block">
+                                        <div class="d-title">{{$position->positions}}</div>
+                                        <div class="text">{{$position->organisation}}</div>
+                                    </div>
+                                    @endforeach
                                 </div>
                                 <hr class="hr-dashed mt-25">
                                 <div class="tribute-block">

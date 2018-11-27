@@ -42,17 +42,17 @@
                             <label class="no-click" for="">Country of birth</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="birth_city" class="validate" required="" aria-required="true">
+                            <input  type="text" name="birth_city" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">City of birth</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input class="datepicker"  type="text" name="passed_date" class="validate" required="" aria-required="true">
+                            <input class="datepicker"  type="text" name="passed_date" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">Date of Deceases</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <select type="text" name="passed_country" class="validate" required="" aria-required="true">
+                            <select type="text" name="passed_country" class="validate reg_click" required="" aria-required="true">
                                 @foreach ($countries as $country)
                                 <option value="{{$country->id}}" source="{{$country->name}}"
                                 @if(old('passed_country') == $country->id)
@@ -88,11 +88,11 @@
                     <div class="title-3 mt-25">Family Details</div>
                     <div class="row" id="more_relation">
                         <div class="col s12 m6 input-field">
-                            <input  type="text" name="relations_name[]">
+                            <input  type="text" name="relations_name[]" class="reg_click">
                             <label class="no-click" for="">Name</label>
                         </div>
                         <div class="col s12 m6 input-field with-control">
-                            <select name="relations_id[]">
+                            <select name="relations_id[]" class="reg_click">
                                 @foreach ($relations as $relation)
                                 <option value="{{$relation->id}}" source="{{$relation->name}}"
                                 @if(old('relations_id') == $relation->id)
@@ -113,11 +113,11 @@
                     <div class="title-3 mt-25">Education</div>
                     <div class="row" id="more_education">
                         <div class="col s12 m6 input-field">
-                            <input  type="text" name="course_name[]">
+                            <input  type="text" class="reg_click" name="course_name[]">
                             <label class="no-click" for="">Course Completed</label>
                         </div>
                         <div class="col s12 m6 input-field with-control">
-                            <select name="course_id[]">
+                            <select name="course_id[]" class="reg_click">
                                 @foreach ($courses as $course)
                                 <option value="{{$course->id}}" source="{{$course->name}}"
                                 @if(old('course_id') == $course->id)
@@ -138,18 +138,11 @@
                     <div class="title-3 mt-25">Employment</div>
                     <div class="row" id="more_employment">
                         <div class="col s12 m6 input-field">
-                            <input  type="text" name="organisation[]">
+                            <input class="organisation reg_click" type="text" name="organisation[]">
                             <label class="no-click" for="">Organization</label>
                         </div>
                         <div class="col s12 m6 input-field with-control">
-                            <select name="positions_id[]">
-                                @foreach ($positions as $position)
-                                <option value="{{$position->id}}" source="{{$position->name}}"
-                                @if(old('positions_id') == $position->id)
-                                selected
-                                @endif>{{$position->name}}</option>
-                                @endforeach
-                            </select>
+                            <input class="position reg_click" type="text" name="position[]">
                             <label class="no-click" for="">Position</label>
                             <div class="remove" onclick="employment_remove()" style="cursor: pointer;"><i class="material-icons">close</i></div>
                         </div>
@@ -163,21 +156,21 @@
                     <div class="title-3 mt-25">Hobbies &amp; Pastimes (100 Words Max)</div>
                     <div class="row">
                         <div class="col s12 m12 input-field">
-                            <textarea name="hobbies" class="auto-init materialize-textarea"></textarea>
+                            <textarea name="hobbies" class="auto-init materialize-textarea reg_click"></textarea>
                             <label class="no-click" for="">Hobbies &amp; Pastimes</label>
                         </div>
                     </div>
                     <div class="title-3 mt-25">Personal Phrase about the deceased( 1000 Words Max)</div>
                     <div class="row">
                         <div class="col s12 m12 input-field">
-                            <textarea name="personal_phrase" class="auto-init materialize-textarea"></textarea>
+                            <textarea name="personal_phrase" class="auto-init materialize-textarea reg_click"></textarea>
                             <label class="no-click" for="">Personal Phrase about the deceased</label>
                         </div>
                     </div>
                     <div class="title-3 mt-25">Memorial Page</div>
                     <div class="row">
                         <div class="col s12 m6 input-field">
-                            <select name="music_id">
+                            <select name="music_id" class="reg_click">
                                 @foreach ($musics as $music)
                                 <option value="{{$music->id}}" source="{{$music->name}}"
                                 @if(old('positions_id') == $music->id)
@@ -312,26 +305,18 @@
                     </form>
                     </div>
                 </div>
+                <form method="post" action="{{ url('payments') }}">
                     <div class="hr-dotted mb-25 mt-15"></div>
                     <div class="step-actions">
                         <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
                         <button id="payment" class="waves-effect waves-dark btn brown darken-3 next-step">PAYMENT</button>
                     </div>
+                </form>
                 </div>
             </li>
         </ul>
         <div class="p-25"></div>
     </div>
-    <script>
-        /*$(function() {
-            var elems = document.getElementById('register');
-            var register_model = M.Modal.init(elems, {});
-            //register_model.open();
-            $('#save_btn').click(function() {
-                register_model.open();
-            })
-        })*/
-    </script>
     <script>
 $(document).ready(function(e){
     $("#vid_aud").hide();
@@ -480,12 +465,14 @@ $(document).ready(function(e){
     });
     $("#employment").click(function(){
         var clone = $("#more_employment").clone();
-        var select = clone.find('select').clone();
-        var input= '<input  type="text" name="organisation[]">';
-        clone.find('input').replaceWith(input);
-        clone.find('.select-wrapper').replaceWith(select);
+        //var select = clone.find('select').clone();
+        var input= '<input class="organisation" type="text" name="organisation[]">';
+        var input2= '<input class="position" type="text" name="position[]">';
+        clone.find('.organisation').replaceWith(input);
+        clone.find('.position').replaceWith(input2);
+        //clone.find('.select-wrapper').replaceWith(select);
         $('.more_employment').append(clone);
-        clone.find('select').formSelect();
+        //clone.find('select').formSelect();
     });
     
     //file type validation
@@ -514,9 +501,9 @@ $(document).ready(function(e){
      $(".reg_click").click(function(){
         var name = localStorage.getItem("user_name");
         if (!name) {
-        var elems = document.getElementById('register');
-            var register_model = M.Modal.init(elems, {});
-            register_model.open();
+        var elem = document.getElementById('auth_model');
+        var auth_model_model = M.Modal.init(elem, {});
+        auth_model_model.open();
         } 
      });
 });

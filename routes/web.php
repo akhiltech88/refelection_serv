@@ -29,6 +29,8 @@ Route::apiResource('memorials', 'MemorialAccountController');
 Route::post('image_upload','MemorialGalleryController@imageUpload');
 Route::post('audio_upload','MemorialGalleryController@audioUpload');
 Route::post('video_upload','MemorialGalleryController@videoUpload');
+Route::post('payments','MemorialAccountController@postPayments');
 Route::post('login','UserController@login');
 Route::post('save_memorial','MemorialController@saveMemorial');
 Route::post('register','UserController@register');
+Route::post('login','UserController@login');

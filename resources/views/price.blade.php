@@ -17,11 +17,11 @@
                     <div class="price-card">
                         <div class="price-card-title">Option One</div>
                         <div class="price-tag">
-                            <div class="price">Price : £ 299 (£ 1.92 per week)</div>
+                            <div class="price">Price : £ 299 </div>
                             <div class="duration">Duration : 3 Years</div>
                         </div>
                         <ul>
-                            <li>Attach up to Fifteen Photographs</li>
+                            <li>Attach up to Five Photographs</li>
                             <li class="no-bullet">&nbsp;</li>
                             <li class="no-bullet">&nbsp;</li>
                         </ul>
@@ -31,7 +31,7 @@
                     <div class="price-card">
                         <div class="price-card-title">Option Two</div>
                         <div class="price-tag">
-                            <div class="price">Price : £405 (£1.56 per week)</div>
+                            <div class="price">Price : £405 </div>
                             <div class="duration">Duration : 5 Years</div>
                         </div>
                         <ul>
@@ -45,7 +45,7 @@
                     <div class="price-card">
                         <div class="price-card-title">Option Three</div>
                         <div class="price-tag">
-                            <div class="price">Price : £520 (£1 per week)</div>
+                            <div class="price">Price : £520 </div>
                             <div class="duration">Duration : 10 Years</div>
                         </div>
                         <ul>

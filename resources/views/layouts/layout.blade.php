@@ -26,7 +26,7 @@
         <div class="container">
             <div class="search-box ml-auto">
                 <input class="browser-default" type="text" placeholder="Search">
-            </div><a id="log_name1" class="orange-text">Login</a> <a id="log_name" class="orange-text">Login</a>
+            </div><a id="log_name1" class="orange-text">Login</a> <a id="login_btn" class="orange-text">Login</a>
         </div>
     </div>
     <nav class="white" role="navigation">
@@ -40,43 +40,69 @@
                 <li><a href="{{ url('contact') }}">CONTACT</a></li>
             </ul>
             <ul class="sidenav" id="nav-mobile">
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="about-us.html">ABOUT</a></li>
-                <li><a href="price.html">PRICE &amp; FEATURES</a></li>
-                <li><a href="create.html">CREATE MEMORIAL</a></li>
-                <li><a href="memorial-wall.html">MEMORIAL WALL</a></li>
-                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="{{ url('/') }}">HOME</a></li>
+                <li><a href="{{ url('about-us') }}">ABOUT</a></li>
+                <li><a href="{{ url('price') }}">PRICE &amp; FEATURES</a></li>
+                <li><a href="{{ url('create-memorials') }}">CREATE MEMORIAL</a></li>
+                <li><a href="{{ url('memorial-wall') }}">MEMORIAL WALL</a></li>
+                <li><a href="{{ url('contact') }}">CONTACT</a></li>
             </ul><a class="sidenav-trigger" href="#" data-target="nav-mobile"><i class="material-icons">menu</i></a>
         </div>
     </nav>
     @yield('main-content')
-
-    <div class="modal modal-fixed-footer" id="register">
-        <form id="registerForm">
-        <div class="modal-content">
-            <h4>Register</h4>
-            <p>Please register to continue</p>
-            <div class="row">
-                <div class="input-field col s12"><i class="material-icons prefix">account_circle</i>
-                    <input class="validate" id="name" name="name" type="text">
-                    <label for="name">Name</label>
+    <div class="modal" id="auth_model">
+        <div class="modal-content auth-box">
+            <div class="row mb-0">
+                <div class="col s12">
+                    <ul class="tabs">
+                        <li class="tab col s6"><a class="active" href="#login-box">LOGIN</a></li>
+                        <li class="tab col s6"><a class="active" href="#register-box">REGISTER</a></li>
+                    </ul>
                 </div>
-                <div class="input-field col s12"><i class="material-icons prefix">mail_outline</i>
-                    <input class="validate" id="email" type="email" name="email">
-                    <label for="email">Email</label>
+                <div class="col s12" id="login-box">
+                    <form id="loginForm">
+                    <div class="row mb-0">
+                        <div class="input-field col s12"><i class="material-icons prefix">mail_outline</i>
+                            <input class="validate" id="login_email" type="email" name="email">
+                            <label for="login_email">Email</label>
+                        </div>
+                        <div class="input-field col s12"><i class="material-icons prefix">lock</i>
+                            <input class="validate" id="login_pass" type="password" name="password">
+                            <label for="login_pass">Password</label>
+                        </div>
+                        <div class="col s12 text-center mt-10">
+                            <button class="btn btn-large block brown darken-3">LOGIN</button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
-                <div class="input-field col s12"><i class="material-icons prefix">lock</i>
-                    <input class="validate" id="password" type="password" name="password">
-                    <label for="pass">Password</label>
-                </div>
-                <div class="input-field col s12"><i class="material-icons prefix">lock</i>
-                    <input class="validate" id="c_password" type="password" name="c_password">
-                    <label for="c_pass">Confirm Password</label>
+                <div class="col s12" id="register-box">
+                    <form id="registerForm">
+                    <div class="row mb-0">
+                        <div class="input-field col s12"><i class="material-icons prefix">account_circle</i>
+                            <input class="validate" id="name" name="name" type="text">
+                            <label for="r_first_name">Name</label>
+                        </div>
+                        <div class="input-field col s12"><i class="material-icons prefix">mail_outline</i>
+                            <input class="validate" id="email" type="email" name="email">
+                            <label for="r_email">Email</label>
+                        </div>
+                        <div class="input-field col s12"><i class="material-icons prefix">lock</i>
+                            <input class="validate" id="password" type="password" name="password">
+                            <label for="r_pass">Password</label>
+                        </div>
+                        <div class="input-field col s12"><i class="material-icons prefix">lock</i>
+                            <input class="validate" id="c_password" type="password" name="c_password">
+                            <label for="r_c_pass">Confirm Password</label>
+                        </div>
+                        <div class="col s12 text-center mt-10">
+                            <button class="btn btn-large block brown darken-3">REGISTER</button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="modal-footer"><input type="submit" name="submit" class="btn-large brown darken-3 white-text" value="SEND"/></div>
-    </form>
     </div>
     <footer class="page-footer white">
         <div class="container">
@@ -104,6 +130,7 @@
         </div>
     </footer>
     <script>
+        login_check();
     $(document).ready(function(e){
         $("#registerForm").on('submit', function(e){
         e.preventDefault();
@@ -123,22 +150,60 @@
                     localStorage.setItem("token", msg.data.api_token);
                     localStorage.setItem("user_name", msg.data.name);
                     localStorage.setItem("users_id", msg.data.id);
-                    console.log('Save');
+                    login_check();
                 }
             }
         });
         
     });  
     });
-    $('#log_name1').hide();
-    $('#log_name').hide();
-    var name = localStorage.getItem("user_name");
-    if (name) {
-        $('#log_name').show();
-        $('#log_name').html(name);
-    } else {
-        $('#log_name1').show();
+    $(document).ready(function(e){
+        $("#loginForm").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('login') }}",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend: function(){
+               // $('.submitBtn').attr("disabled","disabled");
+               // $('#memorialForm').css("opacity",".5");
+            },
+            success: function(msg){
+                if(msg.success){
+                    localStorage.setItem("token", msg.data.api_token);
+                    localStorage.setItem("user_name", msg.data.name);
+                    localStorage.setItem("users_id", msg.data.id);
+                    login_check();                    
+                }
+            }
+        });
+        
+    });  
+    });
+    function login_check(){
+        $('#log_name1').hide();
+        $('#login_btn').hide();
+        var name = localStorage.getItem("user_name");
+        if (name!=null) {
+            $('#log_name1').show();
+            $('#log_name1').html(name);
+            var elem = document.getElementById('auth_model');
+            var auth_model_model = M.Modal.init(elem, {});
+            auth_model_model.close();
+        } else {
+            $('#login_btn').show();
+        }
     }
+    $(function()  {
+        var elem = document.getElementById('auth_model');
+        var auth_model_model = M.Modal.init(elem, {});
+        $('#login_btn').click(function() {
+            auth_model_model.open();
+        })
+    })
     </script>
 </body>
 
