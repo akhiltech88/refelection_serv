@@ -170,10 +170,10 @@
                     <div class="title-3 mt-25">Memorial Page</div>
                     <div class="row">
                         <div class="col s12 m6 input-field">
-                            <select name="music_id" class="reg_click">
+                            <select id="music_id" name="music_id" class="reg_click">
                                 @foreach ($musics as $music)
-                                <option value="{{$music->id}}" source="{{$music->name}}"
-                                @if(old('positions_id') == $music->id)
+                                <option value="{{$music->id}}" source="{{$music->media_url}}"
+                                @if(old('music_id') == $music->id)
                                 selected
                                 @endif>{{$music->name}}</option>
                                 @endforeach
@@ -319,6 +319,10 @@
     </div>
     <script>
 $(document).ready(function(e){
+    change( $('#music_id option:selected').attr('source'));
+    $('#music_id').on('change', function(){
+        change( $('#music_id option:selected').attr('source'));
+    });
     $("#vid_aud").hide();
     //$("#continue").hide();
     $("#memorialForm").on('submit', function(e){
