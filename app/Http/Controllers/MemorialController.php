@@ -35,6 +35,26 @@ class MemorialController extends Controller
             ->withPackages($packages)
             ->withRelations($relations);
     }
+    public function updateMemorial($id)
+    {
+        $themes = Theme::all();
+        $musics = Music::all();
+        $country = Country::all();
+        $relations = Relation::all();
+        $positions = Position::all();
+        $courses = Course::all();
+        $packages = Package::with('package_features')->get();
+        $mem_account = MemorialAccount::with('theme')->with('by_birth')->with('photos')->with('audio')->with('video')->with('education.mem_course')->with('family.mem_relation')->with('position')->find($id);
+        return view('update-memorial')
+            ->withThemes($themes)
+            ->withMusics($musics)
+            ->withCountries($country)
+            ->withPositions($positions)
+            ->withCourses($courses)
+            ->withPackages($packages)
+            ->withRelations($relations)
+            ->withMemorials($mem_account);
+    }
     public function contact(Request $request)
     {
         

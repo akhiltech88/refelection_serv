@@ -13,28 +13,28 @@
                     <div class="title-3">Personal Details</div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="first_name" class="validate reg_click" required="" aria-required="true">
+                            <input  type="text" name="first_name" value="{{$memorials->first_name}}" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">First Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="middle_name" class="validate reg_click">
+                            <input  type="text" name="middle_name" value="{{$memorials->middle_name}}" class="validate reg_click">
                             <label class="no-click" for="">Middle Name</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="last_name" class="validate reg_click" required="" aria-required="true">
+                            <input  type="text" name="last_name" class="validate reg_click" value="{{$memorials->last_name}}" required="" aria-required="true">
                             <label class="no-click" for="">Last Name</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input class="datepicker"  type="text" name="dob" class="validate reg_click" required="" aria-required="true">
+                            <input class="datepicker"  type="text" name="dob" value="{{$memorials->dob}}" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">Date of Birth</label>
                         </div>
                         <div class="col s12 m4 input-field">
                             <select name="birth_country" class="validate reg_click" required="" aria-required="true">
                                 @foreach ($countries as $country)
                                 <option value="{{$country->id}}" source="{{$country->name}}"
-                                @if(old('birth_country') == $country->id)
+                                @if($memorials->passed_country == $country->id)
                                 selected
                                 @endif>{{$country->name}}</option>
                                 @endforeach
@@ -42,20 +42,20 @@
                             <label class="no-click" for="">Country of birth</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="birth_city" class="validate reg_click" required="" aria-required="true">
+                            <input  type="text" name="birth_city" value="{{$memorials->birth_city}}" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">City of birth</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
-                            <input class="datepicker"  type="text" name="passed_date" class="validate reg_click" required="" aria-required="true">
+                            <input class="datepicker"  type="text" name="passed_date" value="{{$memorials->passed_date}}" class="validate reg_click" required="" aria-required="true">
                             <label class="no-click" for="">Date of Deceases</label>
                         </div>
                         <div class="col s12 m4 input-field">
                             <select type="text" name="passed_country" class="validate reg_click" required="" aria-required="true">
                                 @foreach ($countries as $country)
                                 <option value="{{$country->id}}" source="{{$country->name}}"
-                                @if(old('passed_country') == $country->id)
+                                @if($memorials->passed_country == $country->id)
                                 selected
                                 @endif>{{$country->name}}</option>
                                 @endforeach
@@ -63,15 +63,19 @@
                             <label class="no-click" for="">Country of Deceases</label>
                         </div>
                         <div class="col s12 m4 input-field">
-                            <input  type="text" name="passed_city" class="validate" required="" aria-required="true">
+                            <input  type="text" name="passed_city" class="validate" value="{{$memorials->passed_city}}" required="" aria-required="true">
                             <label class="no-click" for="">City of Deceases</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12 m4 input-field">
                             <select name="gender" class="validate" required="" aria-required="true">
-                                <option value="1">Male</option>
-                                <option value="2">Female</option>
+                                <option @if($memorials->gender == 1)
+                                selected
+                                @endif value="1">Male</option>
+                                <option @if($memorials->gender == 2)
+                                selected
+                                @endif value="2">Female</option>
                             </select>
                             <label class="no-click" for="">Gender</label>
                         </div>
@@ -85,16 +89,17 @@
                         </div>
                     </div>
                     <div class="title-3 mt-25">Family Details</div>
+                     @foreach ($memorials->family as $mem_relation)
                     <div class="row" id="more_relation">
                         <div class="col s12 m6 input-field">
-                            <input  type="text" name="relations_name[]" class="reg_click">
+                            <input  type="text" name="relations_name[]" value="{{$mem_relation->name}}" class="reg_click">
                             <label class="no-click" for="">Name</label>
                         </div>
                         <div class="col s12 m6 input-field with-control">
                             <select name="relations_id[]" class="reg_click">
                                 @foreach ($relations as $relation)
                                 <option value="{{$relation->id}}" source="{{$relation->name}}"
-                                @if(old('relations_id') == $relation->id)
+                                @if($mem_relation->id == $relation->id)
                                 selected
                                 @endif>{{$relation->name}}</option>
                                 @endforeach
@@ -103,6 +108,7 @@
                             <div class="remove" onclick="family_remove()" style="cursor: pointer;"><i class="material-icons">close</i></div>
                         </div>
                     </div>
+                    @endforeach
                     <div class="more_relation"></div>
                     <div class="row">
                         <div class="col s12 m12 right-align">
@@ -110,24 +116,27 @@
                         </div>
                     </div>
                     <div class="title-3 mt-25">Education</div>
+                    @foreach ($memorials->education as $education)
                     <div class="row" id="more_education">
                         <div class="col s12 m6 input-field">
-                            <input  type="text" class="reg_click" name="course_name[]">
+                            <input  type="text" class="reg_click" value="{{$education->stream}}" name="course_name[]">
                             <label class="no-click" for="">Course Completed</label>
                         </div>
                         <div class="col s12 m6 input-field with-control">
                             <select name="course_id[]" class="reg_click">
                                 @foreach ($courses as $course)
                                 <option value="{{$course->id}}" source="{{$course->name}}"
-                                @if(old('course_id') == $course->id)
+                                @if($education->course_id == $course->id)
                                 selected
-                                @endif>{{$course->name}}</option>
+                                @endif
+                                >{{$course->name}}</option>
                                 @endforeach
                             </select>
                             <label class="no-click" for="">Course Completed</label>
                             <div class="remove" onclick="education_remove()" style="cursor: pointer;"><i class="material-icons">close</i></div>
                         </div>
                     </div>
+                    @endforeach
                     <div class="more_education"></div>
                     <div class="row">
                         <div class="col s12 m12 right-align">
@@ -135,17 +144,19 @@
                         </div>
                     </div>
                     <div class="title-3 mt-25">Employment</div>
+                    @foreach ($memorials->position as $position)
                     <div class="row" id="more_employment">
                         <div class="col s12 m6 input-field">
-                            <input class="organisation reg_click" type="text" name="organisation[]">
+                            <input class="organisation reg_click" type="text" value="{{$position->organisation}}" name="organisation[]">
                             <label class="no-click" for="">Organization</label>
                         </div>
                         <div class="col s12 m6 input-field with-control">
-                            <input class="position reg_click" type="text" name="position[]">
+                            <input class="position reg_click" type="text" value="{{$position->positions}}" name="position[]">
                             <label class="no-click" for="">Position</label>
                             <div class="remove" onclick="employment_remove()" style="cursor: pointer;"><i class="material-icons">close</i></div>
                         </div>
                     </div>
+                    @endforeach
                     <div class="more_employment"></div>
                     <div class="row">
                         <div class="col s12 m12 right-align">
@@ -155,14 +166,14 @@
                     <div class="title-3 mt-25">Hobbies &amp; Pastimes (100 Words Max)</div>
                     <div class="row">
                         <div class="col s12 m12 input-field">
-                            <textarea name="hobbies" class="auto-init materialize-textarea reg_click"></textarea>
+                            <textarea name="hobbies" class="auto-init materialize-textarea reg_click">{{$memorials->hobbies}}</textarea>
                             <label class="no-click" for="">Hobbies &amp; Pastimes</label>
                         </div>
                     </div>
                     <div class="title-3 mt-25">Personal Phrase about the deceased( 1000 Words Max)</div>
                     <div class="row">
                         <div class="col s12 m12 input-field">
-                            <textarea name="personal_phrase" class="auto-init materialize-textarea reg_click"></textarea>
+                            <textarea name="personal_phrase" class="auto-init materialize-textarea reg_click">{{$memorials->personal_phrase}}</textarea>
                             <label class="no-click" for="">Personal Phrase about the deceased</label>
                         </div>
                     </div>
@@ -172,7 +183,7 @@
                             <select id="music_id" name="music_id" class="reg_click">
                                 @foreach ($musics as $music)
                                 <option value="{{$music->id}}" source="{{$music->media_url}}"
-                                @if(old('music_id') == $music->id)
+                                @if($memorials->music_id == $music->id)
                                 selected
                                 @endif>{{$music->name}}</option>
                                 @endforeach
@@ -209,7 +220,7 @@
                             <select name="relation_id">
                                 @foreach ($relations as $relation)
                                 <option value="{{$relation->id}}" source="{{$relation->name}}"
-                                @if(old('relation_id') == $relation->id)
+                                @if($memorials->relation_id == $relation->id)
                                 selected
                                 @endif>{{$relation->name}}</option>
                                 @endforeach

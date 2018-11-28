@@ -17,6 +17,7 @@
 
 Route::get('/', 'HomeController@index');
 Route::get('create-memorials', 'MemorialController@createMemorial');
+Route::get('update-memorials/{id}', 'MemorialController@updateMemorial');
 Route::get('contact', 'MemorialController@contact');
 Route::get('memorial-wall', 'MemorialController@memorialWall');
 Route::get('memorial-page/{id}', 'MemorialController@memorialPage');
