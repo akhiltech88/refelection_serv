@@ -42,8 +42,8 @@ class MemorialController extends Controller
     }
     public function price(Request $request)
     {
-        
-        return view('price');
+        $packages = Package::with('package_features')->get();
+        return view('price')->withPackages($packages);
     }
     public function memorialWall(Request $request)
     {
