@@ -167,7 +167,7 @@
                             <label class="no-click" for="">Personal Phrase about the deceased</label>
                         </div>
                     </div>
-                    <div class="title-3 mt-25">Memorial Page</div>
+                    <div class="title-3 mt-25">Back Ground Music</div>
                     <div class="row">
                         <div class="col s12 m6 input-field">
                             <select id="music_id" name="music_id" class="reg_click">
@@ -188,6 +188,7 @@
                             <!-- <button class="waves-effect waves-light btn brown darken-4"><i class="material-icons left">play_arrow</i> Play</button> -->
                         </div>
                     </div>
+                    <div class="title-3 mt-25">Memorial Page</div>
                     <div class="row">
                         <div class="col s12">
                             <label class="form-label">Select memorial page header background</label>
@@ -202,9 +203,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="hr-dotted mb-25 mt-15"></div>
+                    <!-- <div class="hr-dotted mb-25 mt-15"></div> -->
+                    <div class="title-3 mt-25">Relation</div>
                     <div class="row">
-                        <div class="col s12 m6 offset-m3 input-field">
+                        <div class="col s12 m6 input-field">
                             <select name="relation_id">
                                 @foreach ($relations as $relation)
                                 <option value="{{$relation->id}}" source="{{$relation->name}}"
@@ -231,7 +233,7 @@
                             @foreach ($packages as $package)
                             <p>
                                 <label>
-                                    <input name="package_id" type="radio" value="{{$package->id}}" checked=""  required="" aria-required="true"><span>Price : £ {{$package->price}} , Duration : {{$package->years}} Years</span>
+                                    <input name="package_id" type="radio" value="{{$package->id}}" checked=""  required="" aria-required="true"><span>Price : £ {{$package->price}} + vat , Duration : {{$package->years}} Years</span>
                                 </label>
                             </p>
                             @endforeach

@@ -38,7 +38,7 @@ function openDialog() {
      var datepicker = M.Datepicker.init(elems, {
          format:'dd-mm-yyyy',
          autoClose: true,
-         yearRange: 100
+         yearRange: 1000
      });
  });
 

@@ -13,48 +13,22 @@
         </div>
         <div class="container">
             <div class="row">
+                @foreach ($packages as $package)
                 <div class="col s12 m4">
                     <div class="price-card">
-                        <div class="price-card-title">Option One</div>
+                        <div class="price-card-title">{{$package->name}}</div>
                         <div class="price-tag">
-                            <div class="price">Price : £ 299 </div>
-                            <div class="duration">Duration : 3 Years</div>
+                            <div class="price">Price : £ {{$package->price}} + vat</div>
+                            <div class="duration">Duration : {{$package->years}} Years</div>
                         </div>
                         <ul>
-                            <li>Attach up to Five Photographs</li>
-                            <li class="no-bullet">&nbsp;</li>
-                            <li class="no-bullet">&nbsp;</li>
+                            <li>Attach up to {{$package->package_features->value}} Photographs</li>
+                            <li class="no-bullet">@if(3 == $package->package_features->package_id) Attach Video Clip @else &nbsp; @endif</li>
+                            <li class="no-bullet">@if(3 == $package->package_features->package_id) Attach Sound Clip @else &nbsp; @endif</li>
                         </ul>
                     </div>
                 </div>
-                <div class="col s12 m4">
-                    <div class="price-card">
-                        <div class="price-card-title">Option Two</div>
-                        <div class="price-tag">
-                            <div class="price">Price : £405 </div>
-                            <div class="duration">Duration : 5 Years</div>
-                        </div>
-                        <ul>
-                            <li>Attach up to Ten Photographs</li>
-                            <li class="no-bullet">&nbsp;</li>
-                            <li class="no-bullet">&nbsp;</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col s12 m4">
-                    <div class="price-card">
-                        <div class="price-card-title">Option Three</div>
-                        <div class="price-tag">
-                            <div class="price">Price : £520 </div>
-                            <div class="duration">Duration : 10 Years</div>
-                        </div>
-                        <ul>
-                            <li>Attach up to Fifteen Photographs</li>
-                            <li>Attach Video Clip</li>
-                            <li>Attach Sound Clip</li>
-                        </ul>
-                    </div>
-                </div>
+                @endforeach
             </div>
             <div class="row">
                 <div class="col s12">
