@@ -84,7 +84,7 @@
                                 <input type="file" id="file" name="file" accept="image/*" class="validate" required="" aria-required="true">
                             </div>
                             <div class="file-path-wrapper">
-                                <input class="file-path validate"  type="text" name="photo" placeholder="Personal Photograph">
+                                <input class="file-path validate"  type="text" value="{{$memorials->photo}}" name="photo" placeholder="Personal Photograph">
                             </div>
                         </div>
                     </div>
@@ -276,10 +276,12 @@
                             <button class="btn brown darken-3 mt-15" type="submit"><i class="material-icons">add</i></button>
                         </div>
                         </form>
-                        <div class="col s12" id="showImages" style="display: none;">
+                        <div class="col s12" id="showImages">
                             <label class="form-label">Gallery Images</label>
                             <div class="theme-chooser" id="image_prepend">
-
+                                @foreach ($memorials->photos as $photos)
+                                <div class="item" ><label><img style="width: 100%;height: 100%" src="'.$photos->media_url.'"></label></div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
